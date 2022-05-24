@@ -1,71 +1,32 @@
-# Deno starter API
+**Deploy via github action**
+1. Go to https://deno.com/deploy and Sign up/in
+2. Select Github repository
+3. Add Github Account
+4. Choose single repo or all repos
+5. Click again on Select Github repository
+6. Your name or organization
+7. Choose repo
+8. Select Production branch
+9. Select `main.ts` file
+10. Change name but it need to be unique 
+11. Link and after few sec we have working app which will update after push to repo
 
-- Added PostgreSQL db driver with ORM => https://deno.land/x/denodb@v1.0.40
-- validation to endpoints
-- import_maps
-- dockerized
+**Deploying you project from local**
 
-
-## Install
-
-Copy .env.example as .env in root directory.
-
-Run ``./scripts/build-docker-image-local.sh `` to build docker image.
-
-
-Run ``docker-compose up api`` to run Deno.
-
-
-Run ``docker-compose up watch`` to run Deno in watch mode.
-
-
-Tip: For Apple M1 users for Deno watch mode we need to change in Dockerfile:
-
-``FROM denoland/deno:1.15.3``
-
-to this:
-
-``FROM lukechannings/deno:latest``
-
- and to docker-compose ``platform: linux/amd64``: 
-
-``    
-services:
-  watch:
-    image: api:local
-    hostname: api
-    platform: linux/amd64
-    volumes:
-    ...
-``
+1. Go to https://deno.com/deploy and Sign up/in
+2. Click on your profile picture then "Access Tokens"
+3. Create and copy access token
+4. Go back to projects and create new project
+5. Choose Empty Project
+6. Copy name of your project
+7. Use `deployctl deploy  --project=PROJECT_NAME --token=TOKEN --import-map=import_map.json src/index.ts`
+8. Check returned url
+9. If every thing is correct then use same command but add `--prod`
+10. App is now deployed and eveyone can access it :D
 
 
-## Migrations
+**Endpoints**
 
-Migrations are in `` migrations `` folder. 
-
-Syntax for class names is like in TypeORM:
-
-File `` 20220124110458-init.ts `` then class should be named `` Init20220124110458 `` :
-File `` 20220130024421-fixes_on_post_users.ts `` then class should be named `` Fixes_on_post_users20220130024421 `` :
-
-Files to migration folder we add manually.
-
-"down" method is not supported yet.
-
-Example migration file: 
-
-``
-import { Model } from "denodb";
-
-export class Init20220124110458 {
-
-    async up(client: any): Promise<void> {
-        await client.queryObject(`SELECT * FROM "migrations"`);
-    }
-
-    async down(client: any): Promise<void> {
-        await client.queryObject(`SELECT * FROM "migrations"`);
-    }
-}
-``
+GET /todos - list of all todos,
+POST /todo {text:'todo'} - create todo,
+PATCH /todo/:id - change todo's status
